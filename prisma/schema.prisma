@@ -1,19 +1,35 @@
-
-generator client{
-    provider = "prisma-client-js"
+generator client {
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlserver"
-    url = env("DATABASE_URL")
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
 }
 
 // Tạo model
-model User { 
-    id Int @id @default(autoincrement())
-    firstName String
-    lastName String
-    age Int
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model User {
+  id         String   @id @default(uuid())
+  firstName  String
+  lastName   String
+  age        Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  houseOwned House[]  @relation("HouseOwner")
+  houseBuilt House[]  @relation("HouseBuilder")
+}
+
+model House {
+  id           String  @id @default(uuid())
+  address      String  @unique
+  wifiPassword String? // Dấu ? tượng trưng cho trường có thể là giá trị là null
+
+  ownerId String
+  owner   User   @relation("HouseOwner", fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction) //Tạo relation với bảng User references với id của bảng User (House.ownerId = User.id)
+
+  buitById String
+  builtBy  User   @relation("HouseBuilder", fields: [buitById], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
