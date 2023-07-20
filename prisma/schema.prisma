@@ -27,8 +27,8 @@ model House {
   ownerId String
   owner   User   @relation("HouseOwner", fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction) //Tạo relation với bảng User references với id của bảng User (House.ownerId = User.id)
 
-  buitById String
-  builtBy  User   @relation("HouseBuilder", fields: [buitById], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  builtById String
+  builtBy  User   @relation("HouseBuilder", fields: [builtById], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
