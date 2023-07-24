@@ -27,7 +27,7 @@ app.put('/:id', async (req,res) => {
 app.delete('/:id', async (req,res) => {
     const id = req.params.id;
     const deletedUser = await prisma.user.delete({ //xóa dữ liệu của bảng user
-        where: {id:parseInt(id)}
+        where: {id:parseInt(id)} 
     })
     res.json(deletedUser);
 })
@@ -41,12 +41,27 @@ app.post('/house', async (req, res) => {
   app.get('/house', async (req, res) => {
     //const allHouse = await prisma.house.findMany();
     const allHouse = await prisma.house.findMany({
-        include:{
+        include:{ //thêm thông tin của owner và thông tin của người xây dựng vào đây
             owner:true,
             builtBy: true
         }
     });
     res.json(allHouse);
+  });
+
+  app.get('/house-detail', async (req, res) => {
+    //const allHouse = await prisma.house.findMany();
+    const address = req.body.address;
+    const house = await prisma.house.findUnique({
+        where: {
+            address,
+        },
+        include:{ //thêm thông tin của owner và thông tin của người xây dựng vào đây
+            owner:true,
+            builtBy: true
+        }
+    });
+    res.json(house);
   });
   
 
